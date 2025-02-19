@@ -4,7 +4,7 @@ import jsonwebtoken from 'jsonwebtoken';
 import jwksClient from 'jwks-rsa';
 
 const tenantId = process.env.TENANT_ID;
-const clientId = process.env.TENANT_ID;
+const clientId = process.env.CLIENT_ID;
 const jwksUri = `https://login.microsoftonline.com/${tenantId}/discovery/v2.0/keys`;
 
 const client = jwksClient(
@@ -28,7 +28,7 @@ function getKey(header: any, callback:any) {
 function authMiddleware(req: Request, res: Response, next: NextFunction): void {
     const authHeader = req.headers.authorization;
 
-    if (!authHeader || authHeader !== "Bearer my-secret-token") {
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
         res.statusCode = 401;
         res.json({ error: "Unauthorized: No token provided" });
         return;
@@ -37,17 +37,20 @@ function authMiddleware(req: Request, res: Response, next: NextFunction): void {
     const token = authHeader.split(' ')[1];
 
     jsonwebtoken.verify(token, getKey, {
-            audience: clientId,
-            issuer: `https://login.microsoftonline.com/${tenantId}/v2.0`,
-            algorithms: ['RS256'],
+            //audience: clientId,
+            //issuer: `https://login.microsoftonline.com/${tenantId}/v2.0`,
+            //algorithms: ['RS256']
         },
         verifyResponse
     );
 
     function verifyResponse(err:any, decoded: any) {
         if (err) {
+            console.error(err);
+
             res.statusCode = 401;
             res.json({ error: 'Unauthorized: Invalid token' });
+            return;
         }
 
         next()
