@@ -1,0 +1,24 @@
+{
+  "name": "ms-entra-hafner",
+  "version": "1.0.0",
+  "description": "This is a simple implementation for OAuth in ts for MS-Entra and googels login page.",
+  "main": "server.ts",
+  "scripts": {
+    "start": "node dist/index.js",
+    "dev": "nodemon --ext ts --exec ts-node src/server.ts",
+    "build": "tsc"
+  },
+  "author": "HaCoGames, HafnerPeter_",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.21.2",
+    "tsc": "^2.0.4"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.13.4",
+    "nodemon": "^3.1.9",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.3"
+  }
+}
